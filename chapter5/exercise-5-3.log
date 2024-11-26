@@ -1,0 +1,54 @@
+Issue: Pinning bpf program is failing. See below. ToDo: Debug
+
+$ sudo bpftool -d prog load hello-buffer-config.bpf.o /sys/fs/bpf/hello
+libbpf: loading hello-buffer-config.bpf.o
+libbpf: elf: section(3) ksyscall/execve, size 728, link 0, flags 6, type=1
+libbpf: sec 'ksyscall/execve': found program 'hello' at insn offset 0 (0 bytes), code size 91 insns (728 bytes)
+libbpf: elf: section(4) .relksyscall/execve, size 80, link 13, flags 40, type=9
+libbpf: elf: section(5) .data, size 12, link 0, flags 3, type=1
+libbpf: elf: section(6) license, size 13, link 0, flags 3, type=1
+libbpf: license of hello-buffer-config.bpf.o is Dual BSD/GPL
+libbpf: elf: section(7) .maps, size 56, link 0, flags 3, type=1
+libbpf: elf: section(8) .BTF, size 1746, link 0, flags 0, type=1
+libbpf: elf: section(10) .BTF.ext, size 700, link 0, flags 0, type=1
+libbpf: elf: section(13) .symtab, size 288, link 1, flags 0, type=2
+libbpf: looking for externs among 12 symbols...
+libbpf: collected 1 externs total
+libbpf: extern (kcfg) #0: symbol 7, off 0, name LINUX_HAS_SYSCALL_WRAPPER
+libbpf: map 'output': at sec_idx 7, offset 0.
+libbpf: map 'output': found type = 4.
+libbpf: map 'output': found key_size = 4.
+libbpf: map 'output': found value_size = 4.
+libbpf: map 'my_config': at sec_idx 7, offset 24.
+libbpf: map 'my_config': found type = 1.
+libbpf: map 'my_config': found key [12], sz = 4.
+libbpf: map 'my_config': found value [16], sz = 12.
+libbpf: map 'my_config': found max_entries = 10240.
+libbpf: map 'hello_bu.data' (global data): at sec_idx 5, offset 0, flags 400.
+libbpf: map 2 is "hello_bu.data"
+libbpf: map 'hello_b.kconfig' (global data): at sec_idx 13, offset 0, flags 480.
+libbpf: map 3 is "hello_b.kconfig"
+libbpf: sec '.relksyscall/execve': collecting relocation for section(3) 'ksyscall/execve'
+libbpf: sec '.relksyscall/execve': relo #0: insn #1 against 'LINUX_HAS_SYSCALL_WRAPPER'
+libbpf: prog 'hello': found extern #0 'LINUX_HAS_SYSCALL_WRAPPER' (sym 7) for insn #1
+libbpf: sec '.relksyscall/execve': relo #1: insn #36 against 'my_config'
+libbpf: prog 'hello': found map 1 (my_config, sec 7, off 24) for insn #36
+libbpf: sec '.relksyscall/execve': relo #2: insn #69 against 'my_config'
+libbpf: prog 'hello': found map 1 (my_config, sec 7, off 24) for insn #69
+libbpf: sec '.relksyscall/execve': relo #3: insn #77 against 'message'
+libbpf: prog 'hello': found data map 2 (hello_bu.data, sec 5, off 0) for insn 77
+libbpf: sec '.relksyscall/execve': relo #4: insn #83 against 'output'
+libbpf: prog 'hello': found map 0 (output, sec 7, off 0) for insn #83
+libbpf: prog 'hello': unrecognized ELF section name 'ksyscall/execve'
+libbpf: failed to guess program type from ELF section 'ksyscall/execve'
+libbpf: supported section(type) names are: socket sk_reuseport/migrate sk_reuseport kprobe/ uprobe/ kretprobe/ uretprobe/ classifier action tracepoint/ tp/ raw_tracepoint/ raw_tp/ tp_
+btf/ fentry/ fmod_ret/ fexit/ fentry.s/ fmod_ret.s/ fexit.s/ freplace/ lsm/ lsm.s/ iter/ syscall xdp_devmap/ xdp_cpumap/ xdp perf_event lwt_in lwt_out lwt_xmit lwt_seg6local cgroup_sk
+b/ingress cgroup_skb/egress cgroup/skb cgroup/sock_create cgroup/sock_release cgroup/sock cgroup/post_bind4 cgroup/post_bind6 cgroup/dev sockops sk_skb/stream_parser sk_skb/stream_ver
+dict sk_skb sk_msg lirc_mode2 flow_dissector cgroup/bind4 cgroup/bind6 cgroup/connect4 cgroup/connect6 cgroup/sendmsg4 cgroup/sendmsg6 cgroup/recvmsg4 cgroup/recvmsg6 cgroup/getpeerna
+me4 cgroup/getpeername6 cgroup/getsockname4 cgroup/getsockname6 cgroup/sysctl cgroup/getsockopt cgroup/setsockopt struct_ops sk_lookup/
+libbpf: failed to guess program type from ELF section 'ksyscall/execve'
+libbpf: supported section(type) names are: socket sk_reuseport/migrate sk_reuseport kprobe/ uprobe/ kretprobe/ uretprobe/ classifier action tracepoint/ tp/ raw_tracepoint/ raw_tp/ tp_
+btf/ fentry/ fmod_ret/ fexit/ fentry.s/ fmod_ret.s/ fexit.s/ freplace/ lsm/ lsm.s/ iter/ syscall xdp_devmap/ xdp_cpumap/ xdp perf_event lwt_in lwt_out lwt_xmit lwt_seg6local cgroup_sk
+b/ingress cgroup_skb/egress cgroup/skb cgroup/sock_create cgroup/sock_release cgroup/sock cgroup/post_bind4 cgroup/post_bind6 cgroup/dev sockops sk_skb/stream_parser sk_skb/stream_ver
+dict sk_skb sk_msg lirc_mode2 flow_dissector cgroup/bind4 cgroup/bind6 cgroup/connect4 cgroup/connect6 cgroup/sendmsg4 cgroup/sendmsg6 cgroup/recvmsg4 cgroup/recvmsg6 cgroup/getpeerna
+me4 cgroup/getpeername6 cgroup/getsockname4 cgroup/getsockname6 cgroup/sysctl cgroup/getsockopt cgroup/setsockopt struct_ops sk_lookup/
