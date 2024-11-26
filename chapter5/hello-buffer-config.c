@@ -46,6 +46,23 @@ int main()
         return 1;
 	}
 
+	struct user_msg_t msg_root = {.message = "Hi root !"};
+	struct user_msg_t msg_1000 = {.message = "Hi user 1000 !"};
+	uint32_t root_id = 0;
+	uint32_t user_id = 1000;
+	// update my_config 
+	int ret = bpf_map__update_elem(skel->maps.my_config, &root_id, sizeof(uint32_t), &msg_root, sizeof(struct user_msg_t), 0);
+	if(ret < 0) {
+		fprintf(stderr, "Failed to update my_config hash map\n");
+		fprintf(stderr, "error no: %d\n", errno);
+	}
+
+	ret = bpf_map__update_elem(skel->maps.my_config, &user_id, sizeof(uint32_t), &msg_1000, sizeof(struct user_msg_t), 0);
+	if(ret < 0) {
+		fprintf(stderr, "Failed to update my_config hash map\n");
+		fprintf(stderr, "error no: %d\n", errno);
+	}
+
 	pb = perf_buffer__new(bpf_map__fd(skel->maps.output), 8, handle_event, lost_event, NULL, NULL);
 	if (!pb) {
 		err = -1;

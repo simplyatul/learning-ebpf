@@ -12,10 +12,6 @@ struct {
     __uint(value_size, sizeof(u32));
 } output SEC(".maps");
 
-struct user_msg_t {
-   char message[12];
-};
-
 struct {
     __uint(type, BPF_MAP_TYPE_HASH);
     __uint(max_entries, 10240);
